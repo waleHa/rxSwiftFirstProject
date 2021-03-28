@@ -10,5 +10,9 @@ target 'rxSwiftCourse' do
 	pod 'RxCocoa', '~> 4.0'
 	pod 'Alamofire', '~> 5.2'
 	pod 'SwiftyJSON'
+	pod 'Firebase/Database'
+	pod 'Firebase/Auth'
+	pod 'Firebase/Firestore'
+
 
 end
