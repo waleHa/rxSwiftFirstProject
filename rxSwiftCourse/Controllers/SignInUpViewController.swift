@@ -105,7 +105,9 @@ class SignInUpViewController: UIViewController {
                         }
                         else{ //if (error == nil){
                              
-                            self.db.setData( ["Email":email, "firstName":firstName, "lastName":lastName,"phoneNumber":phoneNumber, "favNames":[], "favTypes":[], "favYears":[], "favURLs":[]]) {(error) in
+//                            self.db.setData( ["Email":email, "firstName":firstName, "lastName":lastName,"phoneNumber":phoneNumber, "favNames":[], "favTypes":[], "favYears":[], "favURLs":[]]) {(error) in
+//                            self.db.setData( ["Email":email, "firstName":firstName, "lastName":lastName,"phoneNumber":phoneNumber, "favMovie":["favName":String(), "favType":String(), "favYear":String(), "favURL":String()]]) {(error) in
+                                 self.db.setData( ["Email":email, "firstName":firstName, "lastName":lastName,"phoneNumber":phoneNumber, "favMovie":[]]) {(error) in
                                 if let e = error{
                                     self.errorLabel.text = "\(e.localizedDescription)"
                                 }

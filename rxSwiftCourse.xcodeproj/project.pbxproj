@@ -17,6 +17,12 @@
 		844FB1BD25FADF08001E229A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 844FB1BB25FADF08001E229A /* Main.storyboard */; };
 		844FB1BF25FADF13001E229A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 844FB1BE25FADF13001E229A /* Assets.xcassets */; };
 		844FB1C225FADF13001E229A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 844FB1C025FADF13001E229A /* LaunchScreen.storyboard */; };
+		84AF627D26112BA100E785D6 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF627C26112BA100E785D6 /* Post.swift */; };
+		84AF627F2611319600E785D6 /* PostHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF627E2611319600E785D6 /* PostHeaderCell.swift */; };
+		84AF6281261138C800E785D6 /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF6280261138C800E785D6 /* PostCell.swift */; };
+		84AF628326113B5900E785D6 /* NewsfeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF628226113B5900E785D6 /* NewsfeedViewController.swift */; };
+		84AF628526113D5C00E785D6 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF628426113D5C00E785D6 /* Movie.swift */; };
+		84AF6287261693CC00E785D6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF6286261693CC00E785D6 /* User.swift */; };
 		84B815322603CEC200AD4A53 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84B815312603CEC200AD4A53 /* GoogleService-Info.plist */; };
 		84E141C5260408A400EB842C /* SignInUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E141C4260408A400EB842C /* SignInUpViewController.swift */; };
 		84E141C726043AD800EB842C /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E141C626043AD800EB842C /* Utilities.swift */; };
@@ -39,6 +45,12 @@
 		844FB1BE25FADF13001E229A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		844FB1C125FADF13001E229A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		844FB1C325FADF13001E229A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84AF627C26112BA100E785D6 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		84AF627E2611319600E785D6 /* PostHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderCell.swift; sourceTree = "<group>"; };
+		84AF6280261138C800E785D6 /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
+		84AF628226113B5900E785D6 /* NewsfeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsfeedViewController.swift; sourceTree = "<group>"; };
+		84AF628426113D5C00E785D6 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
+		84AF6286261693CC00E785D6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		84B815312603CEC200AD4A53 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		84E141C4260408A400EB842C /* SignInUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInUpViewController.swift; sourceTree = "<group>"; };
 		84E141C626043AD800EB842C /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -113,8 +125,7 @@
 				844FB1B525FADF08001E229A /* AppDelegate.swift */,
 				844FB1B725FADF08001E229A /* SceneDelegate.swift */,
 				84E141C4260408A400EB842C /* SignInUpViewController.swift */,
-				840E0AB0260AB5DA004E4BB7 /* MainCellTableViewCell.swift */,
-				840E0AB2260AD68E004E4BB7 /* FavCellTableViewCell.swift */,
+				84AF628226113B5900E785D6 /* NewsfeedViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -124,6 +135,10 @@
 			children = (
 				844FB1BB25FADF08001E229A /* Main.storyboard */,
 				844FB1C025FADF13001E229A /* LaunchScreen.storyboard */,
+				840E0AB0260AB5DA004E4BB7 /* MainCellTableViewCell.swift */,
+				840E0AB2260AD68E004E4BB7 /* FavCellTableViewCell.swift */,
+				84AF627E2611319600E785D6 /* PostHeaderCell.swift */,
+				84AF6280261138C800E785D6 /* PostCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -132,6 +147,9 @@
 			isa = PBXGroup;
 			children = (
 				841B466725FFE3340010FAF7 /* Key.swift */,
+				84AF627C26112BA100E785D6 /* Post.swift */,
+				84AF628426113D5C00E785D6 /* Movie.swift */,
+				84AF6286261693CC00E785D6 /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -260,15 +278,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84AF628526113D5C00E785D6 /* Movie.swift in Sources */,
 				84E141C726043AD800EB842C /* Utilities.swift in Sources */,
 				844FB1BA25FADF08001E229A /* MainViewController.swift in Sources */,
 				841B466825FFE3340010FAF7 /* Key.swift in Sources */,
+				84AF627F2611319600E785D6 /* PostHeaderCell.swift in Sources */,
 				84E141C5260408A400EB842C /* SignInUpViewController.swift in Sources */,
+				84AF628326113B5900E785D6 /* NewsfeedViewController.swift in Sources */,
 				840E0AAF260A8D7B004E4BB7 /* FavouriteViewController.swift in Sources */,
+				84AF6287261693CC00E785D6 /* User.swift in Sources */,
 				840E0AB3260AD68E004E4BB7 /* FavCellTableViewCell.swift in Sources */,
 				844FB1B625FADF08001E229A /* AppDelegate.swift in Sources */,
 				840E0AB1260AB5DA004E4BB7 /* MainCellTableViewCell.swift in Sources */,
 				844FB1B825FADF08001E229A /* SceneDelegate.swift in Sources */,
+				84AF627D26112BA100E785D6 /* Post.swift in Sources */,
+				84AF6281261138C800E785D6 /* PostCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
