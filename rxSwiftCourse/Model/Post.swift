@@ -8,13 +8,26 @@
 
 import UIKit
 
-struct Post{    
-    var timeAgo: String?
-//    var image: UIImage?
+struct Post: Codable{    
+    var time: String?
     var caption: String?
-    var numberOfLikes:Int = 0
-    var numberOfComments:Int = 0
-//    var numberOfViews:Int = 0
-    var user: User//1
-    var movie:Movie
+    var likedBy: [String]?
+    var comments: [String]?
+    var user: User?
+    var movie:Movie?
+    var id:String?
+    func numberOfComments()->Int{
+        if let c = comments{
+            return c.count
+        }
+        return 0
+    }
+    func numberOfLikes()->Int{
+        if let l = likedBy{
+            return l.count
+        }
+        return 0
+    }
 }
+
+

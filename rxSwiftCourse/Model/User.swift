@@ -8,12 +8,11 @@
 
 import UIKit
 
-struct User{
+struct User: Codable{
     var firstName: String
     var lastName: String
     var email:String
     var phoneNumber:String
-    var favMovie:String
     func createdBy() ->String{
         return "\(firstName) \(lastName)"
     }

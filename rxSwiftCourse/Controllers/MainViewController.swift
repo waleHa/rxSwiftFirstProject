@@ -14,28 +14,25 @@ import SwiftyJSON
 import Firebase
 
 class MainViewController: UIViewController{
-//    var movieNames = [String](){
-//        didSet{
-//            tableView.reloadData()
-//        }
-//    }
-//    var movieTypes = [String]()
-//    var movieYears = [String]()
-//    var movieImagesURL = [String]()
+
     var movies = [Movie](){
         didSet{
             tableView.reloadData()
         }
     }
+    var posts = [Post]()
     
     var favMovies = [Movie]()
+    var favposts = [Post]()
     
+    var currentPost = Post()
+
     var selectedMovieName = ""
     var selectedMovieYear = ""
     var selectedMovieType = ""
     var selectedMovieImagesURL = ""
-    static var passedEmail = ""
-    
+//    static var passedEmail = ""
+    static var passedUser = User(firstName: "", lastName: "", email: "", phoneNumber: "")
     var round : Int = 0
     @IBOutlet weak var movieSearchBar: UISearchBar!
     @IBOutlet weak var addToFavLabel: UILabel!
@@ -46,22 +43,29 @@ class MainViewController: UIViewController{
     @IBOutlet weak var movieCommentTextfield: UITextField!
     
     var userCollectionRef: DocumentReference!
+    var postsDocumentRef : DocumentReference!
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("Wa7a: \(Utilities.getCurrentDateOnly())")
+        print("Wa7a: \(Utilities.getCurrentDate())")
+
+        print("Wa7a: \(Utilities.getCurrentTimeOnly())")
+        
+        postsDocumentRef = Firestore.firestore().collection("Users").document(MainViewController.passedUser.email).collection("post").document("post")
+        userCollectionRef = Firestore.firestore().collection("Users").document(MainViewController.passedUser.email)
+
+        
         tableView.dataSource = self
         tableView.delegate = self
-//        start()
         self.navigationItem.setHidesBackButton(true, animated: true)
         print("Wal: MainViewController")
         questionView.alpha = 0;
         movieCommentTextfield.alpha = 0
         noButton.isHidden = false
-//        addToFavLabel.titleLabel!.minimumScaleFactor = 0.5;
-//        addToFavLabel.titleLabel!.numberOfLines = 2;
-//        addToFavLabel.titleLabel!.textAlignment = .center;
-//        addToFavLabel.titleLabel!.adjustsFontSizeToFitWidth = true;
+
         addToFavLabel.layer.cornerRadius = 10;
 
 
@@ -82,7 +86,6 @@ class MainViewController: UIViewController{
                             var movieYear = ""
                             var movieImageURL = ""
                             self.movies.removeAll()
-                            
 //                            self.movieImagesURL.removeAll()
                             for movie in json["Search"]{
                                 if let title = movie.1["Title"].string{
@@ -107,30 +110,11 @@ class MainViewController: UIViewController{
     @IBAction func yesButtonPressed(_ sender: UIButton) {
         print("WAL: \(round)")
             if round == 1{
-        userCollectionRef = Firestore.firestore().collection("Users").document(MainViewController.passedEmail)
-        self.userCollectionRef.getDocument(completion: { (snapshot, e) in
-        if let error = e{
-            debugPrint("Error fetching docs: \(error.localizedDescription)")
-        }
-        else{
-            guard let snap = snapshot else {return}
-                var selectedMovie = Movie(movieName: self.selectedMovieName, movieYear: self.selectedMovieYear, movieURL: self.selectedMovieImagesURL, movieType: self.selectedMovieType)
-                //retrieve data
-            guard var encodedArray : [String] = snap.get("favMovie") as? [String] else {return}
-            
-            self.userCollectionRef.updateData(["favMovie":self.movieDecode( selectedMovie, encodedArray)]){ e in
-                        if let error = e{
-                        debugPrint("Wal: Error fetching docs: \(error.localizedDescription)")
-                        }
-                    }
-            }
-            
-        })
+
                 addToFavLabel.text! = "Add a comment to the feed?"
                 round = 2
             }
         else if round == 2{
-//                yesButton.setTitle("", for: .normal)
                 addToFavLabel.text! = "Please, add your comment above in the box"
                 yesButton.setTitle("Done", for: .normal)
                 addToFavLabel.alpha = 0
@@ -140,10 +124,99 @@ class MainViewController: UIViewController{
                 round = 3
         }
         else if round == 3{
+                //Case 2: Want to add the post with a comment
+                firestoreSetter()
                 questionView.alpha = 0;
+                movieCommentTextfield.alpha = 0
+                currentPost.caption = movieCommentTextfield.text
         }
 }
-    func start(){
+    @IBAction func noButtonPressed(_ sender: UIButton) {
+        if round == 2{
+            //Case 1: Want to add the post with no comment
+            firestoreSetter()
+            questionView.alpha = 0;
+        }
+    
+    }
+    //MARK:- fuctions
+    func firestoreSetter(){
+        
+        let selectedMovie = Movie(movieName: self.selectedMovieName, movieYear: self.selectedMovieYear, movieURL: self.selectedMovieImagesURL, movieType: self.selectedMovieType)
+         self.currentPost.movie = selectedMovie
+        self.currentPost.time = Utilities.getCurrentDate()
+        self.currentPost.user = MainViewController.passedUser
+
+        //case2
+        if self.movieCommentTextfield.text! != ""{
+            self.currentPost.caption = self.movieCommentTextfield.text!
+        }
+        //case1
+        else{self.currentPost.caption = ""
+        }
+        
+        //Post
+        postsDocumentRef.getDocument(completion: { (snapshot, e) in
+        if let error = e{
+            debugPrint("Error fetching docs: \(error.localizedDescription)")
+        }
+        else{
+            guard let snap = snapshot else {return}
+            
+            //retrieve data
+            guard let encodedMovieArray : [String] = snap.get("favMovies") as? [String] else {return}
+            guard var captions : [String] = snap.get("captions") as? [String] else {return}
+            guard var time : [String] = snap.get("time") as? [String] else {return}
+
+            guard var encodedCommentsArray : [String] = snap.get("comments") as? [String] else {return}
+            guard var likedBy : [String] = snap.get("likedBy") as? [String] else {return}
+            
+            guard var postsIDs : [String] = snap.get("postsIDs") as? [String] else {return}
+            
+
+            if let c = self.currentPost.caption{
+                captions.append(c)
+            }
+            else{
+               captions.append("")
+            }            
+            time.append(self.currentPost.time!)
+            
+            likedBy.append("")
+            encodedCommentsArray.append("")
+            self.currentPost.id = "\(self.currentPost.time!)&\(self.currentPost.user?.email ?? "")"
+            postsIDs.append(self.currentPost.id!)
+            
+            //Update data
+            self.postsDocumentRef.updateData(["postsIDs":postsIDs,"likedBy":likedBy,"comments":encodedCommentsArray,"time":time,"captions":captions,"favMovies":self.movieEncodingMerger( selectedMovie, encodedMovieArray)]){ e in
+                        if let error = e{
+                        debugPrint("Wal: Error fetching docs: \(error.localizedDescription)")
+                        }
+                    }
+            }
+        })
+//        //User
+//        self.userCollectionRef.getDocument(completion: { (snapshot, e) in
+//        if let error = e{
+//            debugPrint("Error fetching docs: \(error.localizedDescription)")
+//        }
+//        else{
+//            guard let snap = snapshot else {return}
+//
+//            guard let encodedArray : [String] = snap.get("favMovie") as? [String] else {return}
+//
+//            //Update data
+//            self.userCollectionRef.updateData(["favMovie":self.movieEncodingMerger( selectedMovie, encodedArray)]){ e in
+//                        if let error = e{
+//                        debugPrint("Wal: Error fetching docs: \(error.localizedDescription)")
+//                        }
+//                    }
+//            }
+//
+//        })
+    }
+
+    func questionViewResetter(){
             questionView.alpha = 1
             addToFavLabel.text! = "Add \(selectedMovieName) to my favourites"
             yesButton.setTitle("Yes", for: .normal)
@@ -151,18 +224,12 @@ class MainViewController: UIViewController{
             noButton.alpha = 1
             noButton.isHidden = false
             movieCommentTextfield.alpha = 0
+            movieCommentTextfield.text = ""
     }
-    func movieDecode(_ selectedMovie:Movie,_ encodedArray:[String]) -> [String]{
+    func movieEncodingMerger(_ selectedMovie:Movie,_ encodedArray:[String]) -> [String]{
         var er=encodedArray
-        do {
-        let encodedData = try JSONEncoder().encode(selectedMovie)
-        if let jsonString = String(data: encodedData, encoding: .utf8){
-            er.append(jsonString)
-            }
-        }
-        catch {
-            print("Failed to decode JSON")
-        }
+        er.append(Utilities.movieToJson(selectedMovie))
+        
         return er
     }
 }
@@ -191,8 +258,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         selectedMovieYear = movies[indexPath.row].movieYear
         selectedMovieType = movies[indexPath.row].movieType
         addToFavLabel.text = "Add \(selectedMovieName) to my favourites"
-        start();
-//        movieCommentTextfield.alpha = 1
+        questionViewResetter();
         round = 1
         
     }

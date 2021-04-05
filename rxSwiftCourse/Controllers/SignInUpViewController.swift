@@ -25,6 +25,10 @@ class SignInUpViewController: UIViewController {
     @IBOutlet weak var Button1: UIButton!
     @IBOutlet weak var Button2: UIButton!
     var passingEmail = ""
+    var passingFirstName = ""
+    var passingLastName = ""
+    var passingPhoneNumber = ""
+    var userCollectionRef: DocumentReference!
     var db : DocumentReference!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +85,9 @@ class SignInUpViewController: UIViewController {
     @IBAction func Button1Pressed(_ sender: UIButton) {
         let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
         let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
-        passingEmail = email
+        
+         self.passingEmail = email
+        
         db = Firestore.firestore().collection("Users").document(email)
 
         if Button1.titleLabel?.text! == "Register"{
@@ -97,17 +103,19 @@ class SignInUpViewController: UIViewController {
                 let firstName = firstNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
                 let lastName = lastNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
                 let phoneNumber = phoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
-
+                
                 //Create the User
                 Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
                         if let e = error{
                             self.errorLabel.text = "\(e.localizedDescription)"
                         }
                         else{ //if (error == nil){
-                             
-//                            self.db.setData( ["Email":email, "firstName":firstName, "lastName":lastName,"phoneNumber":phoneNumber, "favNames":[], "favTypes":[], "favYears":[], "favURLs":[]]) {(error) in
-//                            self.db.setData( ["Email":email, "firstName":firstName, "lastName":lastName,"phoneNumber":phoneNumber, "favMovie":["favName":String(), "favType":String(), "favYear":String(), "favURL":String()]]) {(error) in
-                                 self.db.setData( ["Email":email, "firstName":firstName, "lastName":lastName,"phoneNumber":phoneNumber, "favMovie":[]]) {(error) in
+                           
+                            self.passingFirstName = firstName
+                            self.passingLastName = lastName
+                            self.passingPhoneNumber = phoneNumber
+                            
+                                 self.db.setData( ["Email":email, "firstName":firstName, "lastName":lastName,"phoneNumber":phoneNumber]) {(error) in
                                 if let e = error{
                                     self.errorLabel.text = "\(e.localizedDescription)"
                                 }
@@ -117,6 +125,10 @@ class SignInUpViewController: UIViewController {
                                     self.performSegue(withIdentifier: "ToMain", sender: self)
                                 }
                             }
+                            
+                            var postsDocumentRef = Firestore.firestore().collection("Users").document(self.passingEmail).collection("post").document("post")
+                            postsDocumentRef.setData(["captions":[],"comments":[],"favMovies":[],"likedBy":[],"time":[],"postsIDs":[]])
+
                         }
                 }
             }
@@ -128,7 +140,20 @@ class SignInUpViewController: UIViewController {
                                     self.errorLabel.alpha = 1
                                    }
                                    else{
-//                                    print("Wal: Login")
+                                    self.userCollectionRef = Firestore.firestore().collection("Users").document(self.passingEmail)
+                                    self.userCollectionRef.getDocument(completion: { (snapshot, e) in
+                                    if let error = e{
+                                        debugPrint("Error fetching docs: \(error.localizedDescription)")
+                                    }
+                                    else{
+                                        guard let snap = snapshot else {return}
+                                            //retrieve data
+                                        self.passingFirstName = snap.get("firstName") as! String
+                                        self.passingLastName = snap.get("lastName") as! String
+                                        self.passingPhoneNumber = snap.get("phoneNumber") as! String
+                                        }
+                                    })
+                                                                        
                                     self.performSegue(withIdentifier: "ToMain", sender: self)
                                     
                                    }
@@ -140,7 +165,10 @@ class SignInUpViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 //        print("Wal: before passing")
 //        let vc = segue.destination as! MainViewController
-        MainViewController.passedEmail = passingEmail
+        MainViewController.passedUser.email = passingEmail
+        MainViewController.passedUser.firstName = passingFirstName
+        MainViewController.passedUser.lastName = passingLastName
+        MainViewController.passedUser.phoneNumber = passingPhoneNumber
 //        print("Wal: after passing")
     }
     

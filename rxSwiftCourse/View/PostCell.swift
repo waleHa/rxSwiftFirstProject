@@ -13,18 +13,18 @@ class PostCell: UITableViewCell {
     @IBOutlet weak var numberOfLikes: UIButton!
     @IBOutlet weak var timeAgoLabel: UILabel!
     @IBOutlet weak var postCaptionLabel: UILabel!
-    
-    
     var post:Post!{
         didSet{
             UpdateUI();
         }
     }
     func UpdateUI(){
-        postImageView.image = post.image
+        if let url = URL(string:post.movie!.movieURL){
+        postImageView.load(url: url)
+        }
         postCaptionLabel.text = post.caption
         numberOfLikes.setTitle("♥︎ \(post.numberOfLikes) Likes", for: .normal)
-        timeAgoLabel.text = post.timeAgo
+        timeAgoLabel.text = post.time
     }
     
     override func awakeFromNib() {

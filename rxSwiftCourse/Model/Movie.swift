@@ -14,23 +14,6 @@ struct Movie: Codable{
     var movieURL: String
     var movieType: String
  
-//    func movieEncode(movies:[Data]?) -> [Movie]{
-//        var myMovies = [Movie]()
-//        for movie in movies{
-//            let jsonString = String(data: movie, encoding: .utf8)
-//            if let dataFromJsonString = jsonString?.data(using: .utf8) {
-//                do {
-//                    let movieFromData = try JSONDecoder().decode(Movie.self,
-//                                                            from: dataFromJsonString)
-//                    myMovies.append(movieFromData)
-//                }
-//                catch {
-//                    print("Failed to decode JSON")
-//                }
-//            }
-//        }
-//        return myMovies;
-//    }
     func movieDecode(movies:[Movie]){
         
     }

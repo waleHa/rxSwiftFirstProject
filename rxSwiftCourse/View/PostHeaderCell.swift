@@ -22,7 +22,7 @@ class PostHeaderCell: UITableViewCell {
         profileImageView.layer.cornerRadius = profileImageView.bounds.width/2.0;
         profileImageView.layer.masksToBounds = true
         
-        usernameButton.setTitle(post.user.createdBy(), for: .normal)
+        usernameButton.setTitle(post.user?.createdBy(), for: .normal)
         
         followButton.layer.borderWidth = 1
         followButton.layer.cornerRadius = 2.0
