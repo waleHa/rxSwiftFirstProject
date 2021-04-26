@@ -10,7 +10,11 @@ import UIKit
 import Firebase
 
 class SignInUpViewController: UIViewController {
-
+    static var passedUser = User(firstName: "", lastName: "", email: "", phoneNumber: "", aboutMe: "", twitter: "", instagram: "", snapchat: "", personalImage: "")//{
+//        didSet{
+////            XZ.Main.email = SignInUpViewController.passedUser.email
+//        }
+//    }
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var registerButton: UIButton!
     @IBOutlet weak var logInButton: UIButton!
@@ -28,6 +32,11 @@ class SignInUpViewController: UIViewController {
     var passingFirstName = ""
     var passingLastName = ""
     var passingPhoneNumber = ""
+    var passingAboutMe = ""
+    var passingTwitter = ""
+    var passingInstagram = ""
+    var passingSnapchat = ""
+    var passingPersonalImage = ""
     var userCollectionRef: DocumentReference!
     var db : DocumentReference!
     override func viewDidLoad() {
@@ -114,24 +123,28 @@ class SignInUpViewController: UIViewController {
                             self.passingFirstName = firstName
                             self.passingLastName = lastName
                             self.passingPhoneNumber = phoneNumber
-                            
-                                 self.db.setData( ["Email":email, "firstName":firstName, "lastName":lastName,"phoneNumber":phoneNumber]) {(error) in
-                                if let e = error{
+//                            self.userSetter(e: self.passingEmail, fn: self.passingFirstName, ln: self.passingLastName, ph: self.passingPhoneNumber)
+                            self.db.setData( ["email":email, "firstName":firstName, "lastName":lastName,"phoneNumber":phoneNumber,"aboutMe":self.passingAboutMe,"twitter":self.passingTwitter,"instagram":self.passingInstagram,"snapchat":self.passingSnapchat,"personalImage":self.passingPersonalImage]) {(error) in
+                                    if let e = error{
                                     self.errorLabel.text = "\(e.localizedDescription)"
                                 }
                                 else{ //if (error == nil){
-//                                    print("Wal:Register\(authResult!.user.uid)")
                                     self.errorLabel.text = "User Added Successfully"
                                     self.performSegue(withIdentifier: "ToMain", sender: self)
                                 }
+                                    
                             }
                             
+//                            var postsDocumentRef = Firestore.firestore().collection("Users").document(self.passingEmail).collection("post").document("post")
+//                            postsDocumentRef.setData(["captions":[],"comments":[],"favMovies":[],"likedBy":[],"time":[],"postsIDs":[]])
+                            
                             var postsDocumentRef = Firestore.firestore().collection("Users").document(self.passingEmail).collection("post").document("post")
-                            postsDocumentRef.setData(["captions":[],"comments":[],"favMovies":[],"likedBy":[],"time":[],"postsIDs":[]])
+                            postsDocumentRef.setData([ "posts":[] ])
 
                         }
                 }
             }
+            self.performSegue(withIdentifier: "ToMain", sender: self)
         }
         else if Button1.titleLabel?.text! == "Log In"{
                         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
@@ -148,28 +161,46 @@ class SignInUpViewController: UIViewController {
                                     else{
                                         guard let snap = snapshot else {return}
                                             //retrieve data
-                                        self.passingFirstName = snap.get("firstName") as! String
-                                        self.passingLastName = snap.get("lastName") as! String
-                                        self.passingPhoneNumber = snap.get("phoneNumber") as! String
+                                        let fn = snap.get("firstName") as! String
+                                        let ln = snap.get("lastName") as! String
+                                        let ph = snap.get("phoneNumber") as! String
+                                        let am = snap.get("aboutMe") as! String
+                                        let t = snap.get("twitter") as! String
+                                        let s = snap.get("snapchat") as! String
+                                        let i = snap.get("instagram") as! String
+                                        let pi = snap.get("personalImage") as! String
+                                        self.userSetter(e: self.passingEmail, fn: fn, ln: ln, ph: ph, am: am, t: t, i: i, s: s, pi: pi)
                                         }
-                                    })
-                                                                        
-                                    self.performSegue(withIdentifier: "ToMain", sender: self)
-                                    
+                                    })                                    
                                    }
                            }
-                
-                
         }
     }
+    
+    func userSetter(e:String,fn:String,ln:String,ph:String,am:String,t:String,i:String,s:String,pi:String){
+    passingFirstName = e
+    passingFirstName = fn
+    passingLastName = ln
+    passingPhoneNumber = ph
+        passingAboutMe = am
+        passingTwitter = t
+        passingInstagram = i
+        passingSnapchat = s
+        passingPersonalImage = pi
+     self.performSegue(withIdentifier: "ToMain", sender: self)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        print("Wal: before passing")
 //        let vc = segue.destination as! MainViewController
-        MainViewController.passedUser.email = passingEmail
-        MainViewController.passedUser.firstName = passingFirstName
-        MainViewController.passedUser.lastName = passingLastName
-        MainViewController.passedUser.phoneNumber = passingPhoneNumber
-//        print("Wal: after passing")
+        SignInUpViewController.passedUser.email = passingEmail
+        SignInUpViewController.passedUser.firstName = passingFirstName
+        SignInUpViewController.passedUser.lastName = passingLastName
+        SignInUpViewController.passedUser.phoneNumber = passingPhoneNumber
+        SignInUpViewController.passedUser.aboutMe = passingAboutMe
+        SignInUpViewController.passedUser.twitter = passingTwitter
+        SignInUpViewController.passedUser.snapchat = passingSnapchat
+        SignInUpViewController.passedUser.instagram = passingInstagram
+        SignInUpViewController.passedUser.personalImage = passingPersonalImage
     }
     
     @IBAction func Button2Pressed(_ sender: Any) {

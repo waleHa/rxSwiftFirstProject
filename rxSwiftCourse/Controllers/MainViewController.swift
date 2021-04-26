@@ -20,11 +20,7 @@ class MainViewController: UIViewController{
             tableView.reloadData()
         }
     }
-    var posts = [Post]()
-    
-    var favMovies = [Movie]()
-    var favposts = [Post]()
-    
+        
     var currentPost = Post()
 
     var selectedMovieName = ""
@@ -32,7 +28,11 @@ class MainViewController: UIViewController{
     var selectedMovieType = ""
     var selectedMovieImagesURL = ""
 //    static var passedEmail = ""
-    static var passedUser = User(firstName: "", lastName: "", email: "", phoneNumber: "")
+//    static var passedUser = User(firstName: "", lastName: "", email: "", phoneNumber: "", aboutMe: "", twitter: "", instagram: "", snapchat: "", personalImage: ""){
+//        didSet{
+//            XZ.Main.email = MainViewController.passedUser.email
+//        }
+//    }
     var round : Int = 0
     @IBOutlet weak var movieSearchBar: UISearchBar!
     @IBOutlet weak var addToFavLabel: UILabel!
@@ -48,20 +48,15 @@ class MainViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("HEHE: \(SignInUpViewController.passedUser.email)")
         
-        print("Wa7a: \(Utilities.getCurrentDateOnly())")
-        print("Wa7a: \(Utilities.getCurrentDate())")
-
-        print("Wa7a: \(Utilities.getCurrentTimeOnly())")
-        
-        postsDocumentRef = Firestore.firestore().collection("Users").document(MainViewController.passedUser.email).collection("post").document("post")
-        userCollectionRef = Firestore.firestore().collection("Users").document(MainViewController.passedUser.email)
+        postsDocumentRef = Firestore.firestore().collection("Users").document(SignInUpViewController.passedUser.email).collection("post").document("post")
+        userCollectionRef = Firestore.firestore().collection("Users").document(SignInUpViewController.passedUser.email)
 
         
         tableView.dataSource = self
         tableView.delegate = self
         self.navigationItem.setHidesBackButton(true, animated: true)
-        print("Wal: MainViewController")
         questionView.alpha = 0;
         movieCommentTextfield.alpha = 0
         noButton.isHidden = false
@@ -108,7 +103,6 @@ class MainViewController: UIViewController{
     }
     
     @IBAction func yesButtonPressed(_ sender: UIButton) {
-        print("WAL: \(round)")
             if round == 1{
 
                 addToFavLabel.text! = "Add a comment to the feed?"
@@ -145,8 +139,9 @@ class MainViewController: UIViewController{
         let selectedMovie = Movie(movieName: self.selectedMovieName, movieYear: self.selectedMovieYear, movieURL: self.selectedMovieImagesURL, movieType: self.selectedMovieType)
          self.currentPost.movie = selectedMovie
         self.currentPost.time = Utilities.getCurrentDate()
-        self.currentPost.user = MainViewController.passedUser
-
+        self.currentPost.user = SignInUpViewController.passedUser
+        self.currentPost.id = "\(self.currentPost.time!)&\(self.currentPost.user?.email ?? "")"
+        self.currentPost.likedBy = [""]
         //case2
         if self.movieCommentTextfield.text! != ""{
             self.currentPost.caption = self.movieCommentTextfield.text!
@@ -162,58 +157,32 @@ class MainViewController: UIViewController{
         }
         else{
             guard let snap = snapshot else {return}
-            
-            //retrieve data
-            guard let encodedMovieArray : [String] = snap.get("favMovies") as? [String] else {return}
-            guard var captions : [String] = snap.get("captions") as? [String] else {return}
-            guard var time : [String] = snap.get("time") as? [String] else {return}
 
-            guard var encodedCommentsArray : [String] = snap.get("comments") as? [String] else {return}
-            guard var likedBy : [String] = snap.get("likedBy") as? [String] else {return}
-            
-            guard var postsIDs : [String] = snap.get("postsIDs") as? [String] else {return}
-            
+            guard let posts : [String] = snap.get("posts") as? [String] else {return}
 
-            if let c = self.currentPost.caption{
-                captions.append(c)
+            var myPosts=[Post]()
+            
+            var myencodedPosts=[String]()
+            
+            for post in posts{
+                if let p = Utilities.jsonToPost(post){
+                    myPosts.append(p)}
             }
-            else{
-               captions.append("")
-            }            
-            time.append(self.currentPost.time!)
+            myPosts.append(self.currentPost)
             
-            likedBy.append("")
-            encodedCommentsArray.append("")
-            self.currentPost.id = "\(self.currentPost.time!)&\(self.currentPost.user?.email ?? "")"
-            postsIDs.append(self.currentPost.id!)
+            for post in myPosts{
+                    myencodedPosts.append(Utilities.PostToJson(post))
+            }
             
             //Update data
-            self.postsDocumentRef.updateData(["postsIDs":postsIDs,"likedBy":likedBy,"comments":encodedCommentsArray,"time":time,"captions":captions,"favMovies":self.movieEncodingMerger( selectedMovie, encodedMovieArray)]){ e in
-                        if let error = e{
-                        debugPrint("Wal: Error fetching docs: \(error.localizedDescription)")
-                        }
-                    }
+            self.postsDocumentRef.updateData(["posts":myencodedPosts]){ e in
+                           if let error = e{
+                           debugPrint("Wal: Error fetching docs: \(error.localizedDescription)")
+                           }
+                       }
+
             }
         })
-//        //User
-//        self.userCollectionRef.getDocument(completion: { (snapshot, e) in
-//        if let error = e{
-//            debugPrint("Error fetching docs: \(error.localizedDescription)")
-//        }
-//        else{
-//            guard let snap = snapshot else {return}
-//
-//            guard let encodedArray : [String] = snap.get("favMovie") as? [String] else {return}
-//
-//            //Update data
-//            self.userCollectionRef.updateData(["favMovie":self.movieEncodingMerger( selectedMovie, encodedArray)]){ e in
-//                        if let error = e{
-//                        debugPrint("Wal: Error fetching docs: \(error.localizedDescription)")
-//                        }
-//                    }
-//            }
-//
-//        })
     }
 
     func questionViewResetter(){

@@ -14,7 +14,7 @@ import RxSwift
 extension Reactive where Base: UINavigationItem {
     
     /// Bindable sink for `title` property.
-    public var title: Binder<String?> {
+    public var titleIndex: Binder<String?> {
         return Binder(self.base) { navigationItem, text in
             navigationItem.title = text
         }

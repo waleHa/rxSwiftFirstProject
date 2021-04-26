@@ -78,6 +78,33 @@ class Utilities{
         return nil
     }
     
+    static func PostToJson(_ selectedPost:Post) -> String{
+        var er = ""
+        do {
+        let encodedData = try JSONEncoder().encode(selectedPost)
+        if let jsonString = String(data: encodedData, encoding: .utf8){
+            er = jsonString
+            }
+        }
+        catch {
+            print("Failed to decode JSON")
+        }
+        return er
+    }
+    
+    static func jsonToPost(_ encodedPost: String) -> Post?{
+        if let dataFromJsonString = encodedPost.data(using: .utf8) {
+        do {
+            let PostFromData = try JSONDecoder().decode(Post.self,from: dataFromJsonString)
+            return PostFromData
+        }
+            catch {
+                print("Failed to decode JSON")
+            }
+        }
+        return nil
+    }
+    
     static func jsonToStringArray(_ encoded: String) -> [String]?{
         if let dataFromJsonString = encoded.data(using: .utf8) {
         do {
@@ -115,9 +142,6 @@ class Utilities{
 }
 
 extension Utilities{
-
-    
-
     func getCurrentDate() -> Date? {
         let date = Date()
         let formatter = DateFormatter()
@@ -135,70 +159,31 @@ extension Utilities{
             let dateInString  = formatter.string(from: date)
             return dateInString
         }
-    static func getCurrentDateOnly() -> String {
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.timeZone = TimeZone.init(abbreviation: "EDT")
-        let dateInString  = formatter.string(from: date)
-        return dateInString
-    }
-    static func getCurrentTimeOnly() -> String {
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "hh:mm:ss"
-        formatter.timeZone = TimeZone.init(abbreviation: "EDT")
-        let dateInString  = formatter.string(from: date)
-        return dateInString
-    }
 
-    //
-    //// Creating Date from String
-//    let textDate1 = "2021-03-23T12:21:00-0800"
-    //let textDate2 = "2016-03-06T20:12:05-0900"
-
-    //// Dates used for the comparison
-//    let date1 = dateFormatter.date(from: textDate1)
-
-    func hoursDifference(firstDate:Date,secondDate:Date) -> TimeInterval {
-           let calendar = Calendar.current
-           let date1 = calendar.startOfDay(for: firstDate)
-           let date2 = calendar.startOfDay(for: secondDate)
-           // omitting fractions of seconds for simplicity
-           let dateComponents = calendar.dateComponents([.hour], from: date1,to: date2)
-
-           let dateSeconds = dateComponents.hour!
-
-           return TimeInterval(dateSeconds)
-       }
-    func minutesDifference(firstDate:Date,secondDate:Date) -> TimeInterval {
-           let calendar = Calendar.current
-           let date1 = calendar.startOfDay(for: firstDate)
-           let date2 = calendar.startOfDay(for: secondDate)
-           // omitting fractions of seconds for simplicity
-           let dateComponents = calendar.dateComponents([.minute], from: date1,to: date2)
-
-           let dateSeconds = dateComponents.hour!
-
-           return TimeInterval(dateSeconds)
-       }
-    func daysDifference(firstDate:Date,secondDate:Date) -> Int {
+    static func daysDifference(firstDate:Date,secondDate:Date) -> Int {
         let calendar = Calendar.current
         // omitting fractions of seconds for simplicity
-        
         let date1 = calendar.startOfDay(for: firstDate)
         let date2 = calendar.startOfDay(for: secondDate)
-
         let dateComponents = calendar.dateComponents([.day], from: date1, to: date2)
-                
         return dateComponents.day!
     }
+}
+extension Date {
+    func secondsFromBeginningOfTheDay() -> TimeInterval {
+        let calendar = Calendar.current
+        // omitting fractions of seconds for simplicity
+        let dateComponents = calendar.dateComponents([.hour, .minute, .second], from: self)
 
-//    if let date1 = date1, let date2 = getCurrentDate() {
-//         let diff = hoursDifference(firstDate: date1, secondDate: date2)
-//        let diff2 = minutesDifference(firstDate: date1, secondDate: date2)
-//        print(daysDifference(firstDate: date1,secondDate: date2))
-//         print(diff)
-//        print(diff2)
-//    }
+        let dateSeconds = dateComponents.hour! * 3600 + dateComponents.minute! * 60 + dateComponents.second!
+
+        return TimeInterval(dateSeconds)
+    }
+
+    // Interval between two times of the day in seconds
+    func timeOfDayInterval(toDate date: Date) -> TimeInterval {
+        let date1Seconds = self.secondsFromBeginningOfTheDay()
+        let date2Seconds = date.secondsFromBeginningOfTheDay()
+        return date2Seconds - date1Seconds
+    }
 }

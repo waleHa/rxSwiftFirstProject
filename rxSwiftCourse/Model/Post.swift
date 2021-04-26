@@ -24,9 +24,28 @@ struct Post: Codable{
     }
     func numberOfLikes()->Int{
         if let l = likedBy{
-            return l.count
+            return l.count - 1
         }
         return 0
+    }
+    func didUserLikeMe(_ email:String)->Bool{
+        if numberOfLikes() > 0{
+            for l in likedBy!{
+                if l.hasPrefix(email){
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    mutating func removeMe(_ email:String){
+        var i = 0
+        for l in likedBy!{
+            if l.hasPrefix(email){
+                likedBy?.remove(at: i)
+            }
+            i += 1
+       }
     }
 }
 
