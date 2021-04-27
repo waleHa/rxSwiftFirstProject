@@ -28,10 +28,8 @@ class FavouriteViewController: UIViewController{
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("HEHE: \(SignInUpViewController.passedUser.email)")
         tableView.dataSource = self
         tableView.delegate = self
-        print("Wal:Hello")
         
         ref = Firestore.firestore().collection("Users").document(SignInUpViewController.passedUser.email).collection("post").document("post")
             self.ref.getDocument(completion: { (snapshot, e) in
@@ -53,7 +51,6 @@ class FavouriteViewController: UIViewController{
     }
     func cellDataSetter(_ p:[Post]){
         for i in 0..<p.count{
-            print(i)
             let myCellData = cellData(opened: false, textbox: p[i].caption!, labels: p[i].time!)
            self.tableViewData.append(myCellData)
        }
@@ -93,7 +90,9 @@ extension FavouriteViewController: UITableViewDelegate, UITableViewDataSource {
             }
             else{
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "favCell2") as! FavCell2TableViewCell? else{return UITableViewCell()}
-                cell.label.text = posts[indexPath.section].time;
+                cell.label.text = Utilities.postTime(posts[indexPath.section].time!)
+//                    posts[indexPath.section].time;
+                
                 cell.textfield.text = posts[indexPath.section].caption;
                 return cell
             }

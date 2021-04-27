@@ -48,7 +48,6 @@ class MainViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("HEHE: \(SignInUpViewController.passedUser.email)")
         
         postsDocumentRef = Firestore.firestore().collection("Users").document(SignInUpViewController.passedUser.email).collection("post").document("post")
         userCollectionRef = Firestore.firestore().collection("Users").document(SignInUpViewController.passedUser.email)

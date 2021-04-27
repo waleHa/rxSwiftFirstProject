@@ -34,7 +34,6 @@ class UsersInfoViewController: UIViewController {
                     guard let snap = snapshot else {return}
                     for document in (snap.documents){
                             let data = document.data()
-                            print("Waleed: \(data)")
 //                            self.firstNameTextfield.text = data[Constants.Firebase.firstName] as? String
 //                            self.lastNameTextfield.text = data[Constants.Firebase.lastName] as? String
 //                            self.phoneNoTextfield.text = data[Constants.Firebase.phoneNumber] as? String

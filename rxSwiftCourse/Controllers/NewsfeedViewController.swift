@@ -26,10 +26,8 @@ class NewsfeedViewController: UIViewController, myTableViewCellDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("HEHE: \(SignInUpViewController.passedUser.email)")
         tableView.dataSource = self
         tableView.delegate = self
-        print("Wal: NewsfeedViewController")
 
         self.usersCollectionRef = Firestore.firestore().collection("Users")
 
@@ -69,7 +67,6 @@ class NewsfeedViewController: UIViewController, myTableViewCellDelegate {
             
             //retrieve data
             guard let posts : [String] = snap.get("posts") as? [String] else {return}
-//            print("Wal:\(posts)")
 
             var fetchingPosts=[Post]()
             for p in posts{
@@ -186,7 +183,6 @@ extension NewsfeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Wal:click on row:\(indexPath.row) section:\(indexPath.section)")
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell2") as! PostCell? else{return}
         
     }
@@ -195,13 +191,11 @@ extension NewsfeedViewController: UITableViewDelegate, UITableViewDataSource {
 
         if (posts[titleIndex].didUserLikeMe(SignInUpViewController.passedUser.email)){
             posts[titleIndex].removeMe(SignInUpViewController.passedUser.email)
-            print("Waleed: was available but removed")
             posts[titleIndex].user?.changed = true
         }
         else{
             posts[titleIndex].user?.changed = true
             posts[titleIndex].likedBy?.append(SignInUpViewController.passedUser.email)
-            print("Waleed: was not available but added")
         }
         tableView.reloadData()
 

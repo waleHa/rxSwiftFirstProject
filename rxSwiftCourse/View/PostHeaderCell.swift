@@ -21,7 +21,9 @@ class PostHeaderCell: UITableViewCell {
     func UpdateUI(){
         profileImageView.layer.cornerRadius = profileImageView.bounds.width/2.0;
         profileImageView.layer.masksToBounds = true
-        
+        if let a = post.user?.personalImage{
+            let x = URL(string:"https://img.icons8.com/pastel-glyph/2x/person-male.png")
+            profileImageView.load(url: (URL(string: a) ?? x)!)}
         usernameButton.setTitle(post.user?.createdBy(), for: .normal)
         
         followButton.layer.borderWidth = 1

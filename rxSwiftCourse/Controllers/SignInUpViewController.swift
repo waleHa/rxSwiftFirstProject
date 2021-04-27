@@ -41,6 +41,8 @@ class SignInUpViewController: UIViewController {
     var db : DocumentReference!
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.setHidesBackButton(true, animated: true)
+//        self.tabBarController?.tabBar(, didSelect: false)  
         mainView.alpha = 0
         errorLabel.alpha = 0
     }
@@ -95,7 +97,7 @@ class SignInUpViewController: UIViewController {
         let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
         let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
         
-         self.passingEmail = email
+        self.passingEmail = email
         
         db = Firestore.firestore().collection("Users").document(email)
 
@@ -105,7 +107,6 @@ class SignInUpViewController: UIViewController {
                 //There are are something wrong with the fields, show it
                 errorLabel.alpha = 1
                 errorLabel.text = error!
-                print("WAWA: \(error!)")
             }
             else{
                 //Create cleaned versions of data
@@ -123,18 +124,16 @@ class SignInUpViewController: UIViewController {
                             self.passingFirstName = firstName
                             self.passingLastName = lastName
                             self.passingPhoneNumber = phoneNumber
-//                            self.userSetter(e: self.passingEmail, fn: self.passingFirstName, ln: self.passingLastName, ph: self.passingPhoneNumber)
+                            self.userSetter(fn: self.passingFirstName, ln: self.passingLastName, ph: self.passingPhoneNumber, am: "", t: "", i: "", s: "", pi: "")
                             self.db.setData( ["email":email, "firstName":firstName, "lastName":lastName,"phoneNumber":phoneNumber,"aboutMe":self.passingAboutMe,"twitter":self.passingTwitter,"instagram":self.passingInstagram,"snapchat":self.passingSnapchat,"personalImage":self.passingPersonalImage]) {(error) in
                                     if let e = error{
                                     self.errorLabel.text = "\(e.localizedDescription)"
                                 }
                                 else{ //if (error == nil){
-                                    self.errorLabel.text = "User Added Successfully"
-                                    self.performSegue(withIdentifier: "ToMain", sender: self)
+//                                    self.errorLabel.text = "User Added Successfully"
+//                                    self.performSegue(withIdentifier: "ToMain", sender: self)
                                 }
-                                    
                             }
-                            
 //                            var postsDocumentRef = Firestore.firestore().collection("Users").document(self.passingEmail).collection("post").document("post")
 //                            postsDocumentRef.setData(["captions":[],"comments":[],"favMovies":[],"likedBy":[],"time":[],"postsIDs":[]])
                             
@@ -164,12 +163,13 @@ class SignInUpViewController: UIViewController {
                                         let fn = snap.get("firstName") as! String
                                         let ln = snap.get("lastName") as! String
                                         let ph = snap.get("phoneNumber") as! String
+                                        print("passingPhoneNumber: \(ph)")
                                         let am = snap.get("aboutMe") as! String
                                         let t = snap.get("twitter") as! String
                                         let s = snap.get("snapchat") as! String
                                         let i = snap.get("instagram") as! String
                                         let pi = snap.get("personalImage") as! String
-                                        self.userSetter(e: self.passingEmail, fn: fn, ln: ln, ph: ph, am: am, t: t, i: i, s: s, pi: pi)
+                                        self.userSetter( fn: fn, ln: ln, ph: ph, am: am, t: t, i: i, s: s, pi: pi)
                                         }
                                     })                                    
                                    }
@@ -177,11 +177,11 @@ class SignInUpViewController: UIViewController {
         }
     }
     
-    func userSetter(e:String,fn:String,ln:String,ph:String,am:String,t:String,i:String,s:String,pi:String){
-    passingFirstName = e
+    func userSetter(fn:String,ln:String,ph:String,am:String,t:String,i:String,s:String,pi:String){
     passingFirstName = fn
     passingLastName = ln
     passingPhoneNumber = ph
+
         passingAboutMe = am
         passingTwitter = t
         passingInstagram = i
@@ -192,6 +192,7 @@ class SignInUpViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 //        let vc = segue.destination as! MainViewController
+        print("passingPhoneNumber: \(passingPhoneNumber)")
         SignInUpViewController.passedUser.email = passingEmail
         SignInUpViewController.passedUser.firstName = passingFirstName
         SignInUpViewController.passedUser.lastName = passingLastName
