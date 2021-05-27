@@ -47,7 +47,7 @@
 		844B748A263007F8001E266D /* MyInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoViewController.swift; sourceTree = "<group>"; };
 		844B748C2630083A001E266D /* UsersInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersInfoViewController.swift; sourceTree = "<group>"; };
 		844B7490263565D7001E266D /* XZ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XZ.swift; sourceTree = "<group>"; };
-		844FB1B225FADF08001E229A /* rxSwiftCourse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rxSwiftCourse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		844FB1B225FADF08001E229A /* Next Movie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Next Movie.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		844FB1B525FADF08001E229A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		844FB1B725FADF08001E229A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		844FB1B925FADF08001E229A /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -108,7 +108,7 @@
 		844FB1B325FADF08001E229A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				844FB1B225FADF08001E229A /* rxSwiftCourse.app */,
+				844FB1B225FADF08001E229A /* Next Movie.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -196,7 +196,7 @@
 			);
 			name = rxSwiftCourse;
 			productName = rxSwiftCourse;
-			productReference = 844FB1B225FADF08001E229A /* rxSwiftCourse.app */;
+			productReference = 844FB1B225FADF08001E229A /* Next Movie.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -464,7 +464,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wa7a.rxSwiftCourse;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Next Movie";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -482,7 +482,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wa7a.rxSwiftCourse;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Next Movie";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

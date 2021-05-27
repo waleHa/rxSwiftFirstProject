@@ -10,6 +10,7 @@ import UIKit
 
 struct Post: Codable{    
     var time: String?
+    var numberOfSec: Int?=0
     var caption: String?
     var likedBy: [String]?
     var comments: [String]?

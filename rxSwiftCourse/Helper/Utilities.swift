@@ -168,6 +168,24 @@ extension Utilities{
         let dateComponents = calendar.dateComponents([.day], from: date1, to: date2)
         return dateComponents.day!
     }
+    
+    static func postSecendsAgo(_ t:String)->Int{
+        let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'&'hh:mm:ss"
+        return formatter
+        } ()
+        let d1 = dateFormatter.date(from: Utilities.getCurrentDate())
+        let d2 = dateFormatter.date(from: t)
+        if let date1 = d1, let date2 = d2{
+        let seconds = Int(date1.timeIntervalSince(date2))
+            print("seconds:\(seconds)")
+            return seconds
+        }
+        
+        return 0
+    }
+
     static func postTime(_ t:String)->String{
         var result = ""
         let dateFormatter: DateFormatter = {
@@ -175,8 +193,7 @@ extension Utilities{
             formatter.dateFormat = "yyyy-MM-dd'&'hh:mm:ss"
             return formatter
         } ()
-        let s1 = Utilities.getCurrentDate()
-        let d1 = dateFormatter.date(from: s1)
+        let d1 = dateFormatter.date(from: Utilities.getCurrentDate())
         let d2 = dateFormatter.date(from: t)
         if let date1 = d1, let date2 = d2{
             let days = Utilities.daysDifference(firstDate: date2,secondDate: date1)

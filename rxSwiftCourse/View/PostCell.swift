@@ -9,7 +9,7 @@
 import UIKit
 
 protocol myTableViewCellDelegate: AnyObject{
-    func didTapButton(with titleIndex:Int)
+    func didTapLikeButton(with titleIndex:Int)
 }
 
 
@@ -17,19 +17,18 @@ class PostCell: UITableViewCell {
     weak var delegate: myTableViewCellDelegate?
     var titleIndex:Int = -1
     @IBOutlet weak var postImageView: UIImageView!
-
     @IBOutlet weak var comment: UIButton!
     @IBOutlet weak var numberOfLikes: UIButton!
     @IBOutlet weak var postCaptionLabel: UILabel!
     @IBOutlet weak var timeAgoLabel: UILabel!
-    
+    @IBOutlet weak var like: UIButton!//{
+
     var clickedPost:Int?
     var post:Post!{
         didSet{
             UpdateUI();
         }
     }
-    @IBOutlet weak var like: UIButton!//{
     
     func UpdateUI(){
         if let url = URL(string:post.movie!.movieURL){
@@ -42,6 +41,7 @@ class PostCell: UITableViewCell {
         }
         else{
         }
+        
         if (post.didUserLikeMe(SignInUpViewController.passedUser.email)){
             like.setImage(#imageLiteral(resourceName: "liked"), for: .normal)
         }
@@ -60,8 +60,10 @@ class PostCell: UITableViewCell {
         // Configure the view for the selected state
     }
     @IBAction func likeButtonPressed(_ sender: UIButton) {
-        delegate?.didTapButton(with:titleIndex)
+        delegate?.didTapLikeButton(with:titleIndex)
     }
+    
+    
     func configure(with index:Int){
         self.titleIndex = index
         like.setTitle("\(index)", for: .normal)

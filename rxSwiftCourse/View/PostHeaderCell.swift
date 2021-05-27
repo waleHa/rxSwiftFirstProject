@@ -8,7 +8,13 @@
 
 import UIKit
 
+protocol myTableTitleViewCellDelegate: AnyObject{
+    func didTapFollowButton(with titleIndex:Int)
+}
+
 class PostHeaderCell: UITableViewCell {
+    weak var delegate: myTableTitleViewCellDelegate?
+    var titleIndex:Int = -1
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var usernameButton: UIButton!
     @IBOutlet weak var followButton: UIButton!
@@ -38,9 +44,15 @@ class PostHeaderCell: UITableViewCell {
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
         // Configure the view for the selected state
     }
     
+    @IBAction func followButtonPressed(_ sender: UIButton) {
+        delegate?.didTapFollowButton(with: titleIndex)
+    }
+    func configure(with index:Int){
+        self.titleIndex = index
+        followButton.setTitle("\(index)", for: .normal)
+    }
     
 }

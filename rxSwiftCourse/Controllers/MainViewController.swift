@@ -45,14 +45,17 @@ class MainViewController: UIViewController{
     var userCollectionRef: DocumentReference!
     var postsDocumentRef : DocumentReference!
     @IBOutlet weak var tableView: UITableView!
-    
+    override func viewDidAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
         postsDocumentRef = Firestore.firestore().collection("Users").document(SignInUpViewController.passedUser.email).collection("post").document("post")
         userCollectionRef = Firestore.firestore().collection("Users").document(SignInUpViewController.passedUser.email)
+        self.navigationController?.navigationBar.isHidden = true
+//        tabBarController?.tabBar.isHidden = true
 
-        
         tableView.dataSource = self
         tableView.delegate = self
         self.navigationItem.setHidesBackButton(true, animated: true)
@@ -115,6 +118,8 @@ class MainViewController: UIViewController{
                 noButton.isHidden = true
                 movieCommentTextfield.alpha = 1
                 round = 3
+                SignInUpViewController.myPostChanged = true
+                SignInUpViewController.newsfeedChanged = true
         }
         else if round == 3{
                 //Case 2: Want to add the post with a comment
@@ -129,6 +134,8 @@ class MainViewController: UIViewController{
             //Case 1: Want to add the post with no comment
             firestoreSetter()
             questionView.alpha = 0;
+            SignInUpViewController.myPostChanged = true
+            SignInUpViewController.newsfeedChanged = true
         }
     
     }

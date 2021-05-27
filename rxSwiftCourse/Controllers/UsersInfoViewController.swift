@@ -12,46 +12,32 @@ class UsersInfoViewController: UIViewController {
 
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var lastNameLabel: UILabel!
-    @IBOutlet weak var aboutMeLabel: UITextView!
+    @IBOutlet weak var aboutMeLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var twitterLable: UILabel!
     @IBOutlet weak var snapchatLabel: UILabel!
     
-    var user:User = SignInUpViewController.passedUser
-    var userCollectionRef: CollectionReference!
-
+    @IBOutlet weak var userImage: UIImageView!
+    @IBOutlet weak var instagramLabel: UILabel!
+    var user=User(firstName: "", lastName: "", email: "", phoneNumber: "", aboutMe: "", twitter: "", instagram: "", snapchat: "", personalImage: "")
+    override func viewDidAppear(_ animated: Bool) {
+        print("UsersInfoViewController")
+//        tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("UsersInfoViewController: \(SignInUpViewController.passedUser)")
-//        if user.changed{
-            self.userCollectionRef = Firestore.firestore().collection("Users")
-            
-            userCollectionRef.whereField("email", isEqualTo: "a@a.com").getDocuments(completion: { (snapshot, e) in
-                if let error = e{
-                    debugPrint("Error fetching docs: \(error.localizedDescription)")
-                }
-                else{
-                    guard let snap = snapshot else {return}
-                    for document in (snap.documents){
-                            let data = document.data()
-//                            self.firstNameTextfield.text = data[Constants.Firebase.firstName] as? String
-//                            self.lastNameTextfield.text = data[Constants.Firebase.lastName] as? String
-//                            self.phoneNoTextfield.text = data[Constants.Firebase.phoneNumber] as? String
-//                            let fullAddress = data[Constants.Firebase.fullAddress] as? Dictionary<String, String>
-//                            
-//                            self.provinceNameTextfield.text = fullAddress?[Constants.Firebase.province]
-//                            self.zipCodeTextfield.text = fullAddress?[Constants.Firebase.zipCode]
-//                            self.countryTextfield.text = fullAddress?[Constants.Firebase.country]
-//                            self.cityTextfield.text = fullAddress?[Constants.Firebase.city]
-//                            self.address1Textfield.text = fullAddress?[Constants.Firebase.address1]
-//                            self.address2Textfield.text = fullAddress?[Constants.Firebase.address2]
-//                            self.emailTextfield.text = Auth.auth().currentUser?.email
-                    }
-                }
-            })
-            
-//        }
-        
+        firstNameLabel.text = user.firstName
+        lastNameLabel.text = user.lastName
+        aboutMeLabel.text = user.aboutMe
+        emailLabel.text = user.email
+        twitterLable.text = user.twitter
+        snapchatLabel.text = user.snapchat
+        instagramLabel.text = user.instagram
+        print("\(user.firstName) \(user.lastName) \(user.email)")
+        let xURL = URL(string:"https://img.icons8.com/pastel-glyph/2x/person-male.png")
+        userImage.load(url: (URL(string: user.personalImage) ?? xURL)!)
+        print(user.personalImage)
     }
     
 

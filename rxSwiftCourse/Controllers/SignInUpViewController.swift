@@ -10,11 +10,9 @@ import UIKit
 import Firebase
 
 class SignInUpViewController: UIViewController {
-    static var passedUser = User(firstName: "", lastName: "", email: "", phoneNumber: "", aboutMe: "", twitter: "", instagram: "", snapchat: "", personalImage: "")//{
-//        didSet{
-////            XZ.Main.email = SignInUpViewController.passedUser.email
-//        }
-//    }
+    static var passedUser = User(firstName: "", lastName: "", email: "", phoneNumber: "", aboutMe: "", twitter: "", instagram: "", snapchat: "", personalImage: "")
+    static var myPostChanged = false
+    static var newsfeedChanged = false
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var registerButton: UIButton!
     @IBOutlet weak var logInButton: UIButton!
@@ -39,10 +37,16 @@ class SignInUpViewController: UIViewController {
     var passingPersonalImage = ""
     var userCollectionRef: DocumentReference!
     var db : DocumentReference!
+    override func viewDidAppear(_ animated: Bool) {
+        print("SignInUpViewController")
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.setHidesBackButton(true, animated: true)
-//        self.tabBarController?.tabBar(, didSelect: false)  
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationController?.navigationBar.isHidden = true
+
+//                    .tabBar(self, didSelect: false)
         mainView.alpha = 0
         errorLabel.alpha = 0
     }
@@ -70,128 +74,147 @@ class SignInUpViewController: UIViewController {
     }
     @IBAction func registerButtonPressed(_ sender: UIButton){
         registerUI()
-
+        
     }
     
-        func validateFields() -> String?{
-            let cleanedPassword = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
-            if (firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+    func validateFields() -> String?{
+        let cleanedPassword = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
+        if (firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             lastNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             phoneNumberTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ){
-                return "Please, fill in all fields.";
-            }
-//            else if (Utilities.isPasswordValid(cleanedPassword) == false){
-//                return "Please, make sure your password is at least 8 characters, contains a speacial character and a number."
-//            }
-            else{
-            return nil
-            }
+            return "Please, fill in all fields.";
         }
+            //            else if (Utilities.isPasswordValid(cleanedPassword) == false){
+            //                return "Please, make sure your password is at least 8 characters, contains a speacial character and a number."
+            //            }
+        else{
+            return nil
+        }
+    }
     
     @IBAction func logInButtonPressed(_ sender: UIButton) {
         logInUI()
     }
     
     @IBAction func Button1Pressed(_ sender: UIButton) {
-        let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
-        let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
         
-        self.passingEmail = email
-        
-        db = Firestore.firestore().collection("Users").document(email)
-
-        if Button1.titleLabel?.text! == "Register"{
-            let error = validateFields()
-            if error != nil{
-                //There are are something wrong with the fields, show it
-                errorLabel.alpha = 1
-                errorLabel.text = error!
-            }
-            else{
-                //Create cleaned versions of data
-                let firstName = firstNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
-                let lastName = lastNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
-                let phoneNumber = phoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
+        if emailTextField.text == "" || passwordTextField.text == ""{
+            print("eeorr")
+            errorLabel.alpha = 1
+            errorLabel.text = "Please fill all the fields."
+        }
+        else{
+            
+            guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return}
+            guard let password = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return}
+            
+            self.passingEmail = email
+            
+            db = Firestore.firestore().collection("Users").document(email)
+            
+            if Button1.titleLabel?.text! == "Register"{
                 
-                //Create the User
-                Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+                let error = validateFields()
+                
+                if error != nil{
+                    //There are are something wrong with the fields, show it
+                    errorLabel.alpha = 1
+                    errorLabel.text = error!
+                }
+                else{
+                    //Create cleaned versions of data
+                    let firstName = firstNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
+                    let lastName = lastNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
+                    let phoneNumber = phoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines);
+                    //Create the User
+                    Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
                         if let e = error{
                             self.errorLabel.text = "\(e.localizedDescription)"
+                            
                         }
                         else{ //if (error == nil){
-                           
+                            
                             self.passingFirstName = firstName
                             self.passingLastName = lastName
                             self.passingPhoneNumber = phoneNumber
                             self.userSetter(fn: self.passingFirstName, ln: self.passingLastName, ph: self.passingPhoneNumber, am: "", t: "", i: "", s: "", pi: "")
                             self.db.setData( ["email":email, "firstName":firstName, "lastName":lastName,"phoneNumber":phoneNumber,"aboutMe":self.passingAboutMe,"twitter":self.passingTwitter,"instagram":self.passingInstagram,"snapchat":self.passingSnapchat,"personalImage":self.passingPersonalImage]) {(error) in
-                                    if let e = error{
+                                if let e = error{
                                     self.errorLabel.text = "\(e.localizedDescription)"
                                 }
                                 else{ //if (error == nil){
-//                                    self.errorLabel.text = "User Added Successfully"
-//                                    self.performSegue(withIdentifier: "ToMain", sender: self)
+                                    //                                    self.errorLabel.text = "User Added Successfully"
+                                    //                                    self.performSegue(withIdentifier: "ToMain", sender: self)
                                 }
                             }
-//                            var postsDocumentRef = Firestore.firestore().collection("Users").document(self.passingEmail).collection("post").document("post")
-//                            postsDocumentRef.setData(["captions":[],"comments":[],"favMovies":[],"likedBy":[],"time":[],"postsIDs":[]])
-                            
                             var postsDocumentRef = Firestore.firestore().collection("Users").document(self.passingEmail).collection("post").document("post")
                             postsDocumentRef.setData([ "posts":[] ])
-
+                            
                         }
+                    }
+                }
+                self.performSegue(withIdentifier: "ToMain", sender: self)
+            }
+            if Button1.titleLabel?.text! == "Log In"{
+                print("Wa7a:\(email) \(password)")
+                Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+                if let e = error{
+                    self.errorLabel.text = e.localizedDescription
+                    self.errorLabel.alpha = 1
+                    print("Wa7a1:\(email) ")
+
+                }
+                else{
+                    print("Wa7a2:\(email)")
+                    self.userDataGetter(email)
+                    }
                 }
             }
-            self.performSegue(withIdentifier: "ToMain", sender: self)
         }
-        else if Button1.titleLabel?.text! == "Log In"{
-                        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-                                   if let e = error{
-                                    self.errorLabel.text = e.localizedDescription
-                                    self.errorLabel.alpha = 1
-                                   }
-                                   else{
-                                    self.userCollectionRef = Firestore.firestore().collection("Users").document(self.passingEmail)
-                                    self.userCollectionRef.getDocument(completion: { (snapshot, e) in
-                                    if let error = e{
-                                        debugPrint("Error fetching docs: \(error.localizedDescription)")
-                                    }
-                                    else{
-                                        guard let snap = snapshot else {return}
-                                            //retrieve data
-                                        let fn = snap.get("firstName") as! String
-                                        let ln = snap.get("lastName") as! String
-                                        let ph = snap.get("phoneNumber") as! String
-                                        print("passingPhoneNumber: \(ph)")
-                                        let am = snap.get("aboutMe") as! String
-                                        let t = snap.get("twitter") as! String
-                                        let s = snap.get("snapchat") as! String
-                                        let i = snap.get("instagram") as! String
-                                        let pi = snap.get("personalImage") as! String
-                                        self.userSetter( fn: fn, ln: ln, ph: ph, am: am, t: t, i: i, s: s, pi: pi)
-                                        }
-                                    })                                    
-                                   }
-                           }
-        }
+        
     }
-    
-    func userSetter(fn:String,ln:String,ph:String,am:String,t:String,i:String,s:String,pi:String){
-    passingFirstName = fn
-    passingLastName = ln
-    passingPhoneNumber = ph
+        
+            func userDataGetter(_ email:String){
+                
+                self.userCollectionRef = Firestore.firestore().collection("Users").document(email)
+                self.userCollectionRef.getDocument(completion: { (snapshot, e) in
+                    if let error = e{
+                        print("Error fetching docs: \(error.localizedDescription)")
+                    }
+                    else{
+                        guard let snap = snapshot else {return}
+                        //retrieve data
+                        let fn = snap.get("firstName") as! String
+                        let ln = snap.get("lastName") as! String
+                        let ph = snap.get("phoneNumber") as! String
+                        print("passingPhoneNumber: \(ph)")
+                        let am = snap.get("aboutMe") as! String
+                        let t = snap.get("twitter") as! String
+                        let s = snap.get("snapchat") as! String
+                        let i = snap.get("instagram") as! String
+                        let pi = snap.get("personalImage") as! String
+                        self.userSetter( fn: fn, ln: ln, ph: ph, am: am, t: t, i: i, s: s, pi: pi)
+                    }
+                })
+            }
 
+        
+    func userSetter(fn:String,ln:String,ph:String,am:String,t:String,i:String,s:String,pi:String){
+        passingFirstName = fn
+        passingLastName = ln
+        passingPhoneNumber = ph
+        
         passingAboutMe = am
         passingTwitter = t
         passingInstagram = i
         passingSnapchat = s
         passingPersonalImage = pi
-     self.performSegue(withIdentifier: "ToMain", sender: self)
+        self.performSegue(withIdentifier: "ToMain", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        let vc = segue.destination as! MainViewController
+        //        let vc = segue.destination as! MainViewController
         print("passingPhoneNumber: \(passingPhoneNumber)")
         SignInUpViewController.passedUser.email = passingEmail
         SignInUpViewController.passedUser.firstName = passingFirstName
@@ -216,16 +239,16 @@ class SignInUpViewController: UIViewController {
     
     
     
-
-
+    
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

@@ -22,27 +22,33 @@ class MyInfoViewController: UIViewController{
     @IBOutlet weak var personalImage: UIImageView!
     
     
-    var firstName:String = ""{didSet{ChangeChecker()}}
-    var lastName:String = ""{didSet{ChangeChecker()}}
-    var aboutMe:String = ""{didSet{ChangeChecker()}}
-    var email:String = ""{didSet{ChangeChecker()}}
-    var phoneNumber:String = ""{didSet{ChangeChecker()}}
-    var twitter:String = ""{didSet{ChangeChecker()}}
-    var snapchat:String = ""{didSet{ChangeChecker()}}
-    var instagram:String = ""{didSet{ChangeChecker()}}
-    var newImage:UIImage? = nil {didSet{ChangeChecker()}}
+    var firstName:String = ""
+    var lastName:String = ""
+    var aboutMe:String = ""
+    var email:String = ""
+    var phoneNumber:String = ""
+    var twitter:String = ""
+    var snapchat:String = ""
+    var instagram:String = ""
+    var newImage:UIImage? = nil
     let picker = UIImagePickerController()
     
 //    var user:User = SignInUpViewController.passedUser
     var userCollectionRef: CollectionReference!
-
+    var userDocumentRef: DocumentReference!
+    override func viewDidAppear(_ animated: Bool) {
+        print("MyInfoViewController")
+//        tableView.reloadData()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.InitiateTextsValues(firstName: SignInUpViewController.passedUser.firstName, lastName: SignInUpViewController.passedUser.lastName, aboutMe: SignInUpViewController.passedUser.aboutMe, email: SignInUpViewController.passedUser.email, phoneNumber: SignInUpViewController.passedUser.phoneNumber, instagram: SignInUpViewController.passedUser.instagram, twitter: SignInUpViewController.passedUser.twitter, snapchat: SignInUpViewController.passedUser.snapchat,image:SignInUpViewController.passedUser.personalImage)
         
         self.userCollectionRef = Firestore.firestore().collection("Users")
+        self.userDocumentRef = Firestore.firestore().collection("Users").document(SignInUpViewController.passedUser.email)
         
+        print(SignInUpViewController.passedUser.email)
         
         personalImage.isUserInteractionEnabled = true;
 
@@ -54,7 +60,6 @@ class MyInfoViewController: UIViewController{
 
     
     func InitiateTextsValues(firstName:String,lastName:String,aboutMe:String,email:String,phoneNumber:String,instagram:String,twitter:String,snapchat:String,image:String){
-        
         self.aboutMeTextfield.text = aboutMe
         self.snapchatTextfield.text = snapchat
         self.twitterTextfield.text = twitter
@@ -66,21 +71,48 @@ class MyInfoViewController: UIViewController{
         if image != ""{
             personalImage.load(url: URL(string:image)!)
         }
-        
     }
     func ChangeChecker(){
-        SignInUpViewController.passedUser.changed = true
+        if
+        self.aboutMeTextfield.text != aboutMe ||
+        self.snapchatTextfield.text != snapchat ||
+        self.twitterTextfield.text != twitter ||
+        self.phoneNumberTextfield.text != phoneNumber ||
+        self.instagramTextfield.text != instagram ||
+        self.firstNameTextfield.text != firstName ||
+        self.emailText.text != email ||
+        self.lastNameTextfield.text != lastName{
+            SignInUpViewController.passedUser.changed = true
+        }
     }
+    
     func imageURLSetter(url:String){
         SignInUpViewController.passedUser.personalImage = url
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
+        print("viewWillDisappear")
+        ChangeChecker()
         if SignInUpViewController.passedUser.changed == true{
+            print("Changed")
+                        userDocumentRef.updateData(["aboutMe":self.aboutMeTextfield.text!,
+                        "snapchat":self.snapchatTextfield.text!,
+                        "twitter":self.twitterTextfield.text!,
+                        "phoneNumber":self.phoneNumberTextfield.text!,
+                        "instagram":self.instagramTextfield.text!,
+                                    "firstName":self.firstNameTextfield.text!,
+                                    "lastName":self.lastNameTextfield.text!]){ e in
+                                    if let error = e{
+                                        debugPrint("Error fetching docs: \(error.localizedDescription)")
+                                    }
+                                    else{
+                                        
+                                        self.userUpdater(aboutme: self.aboutMeTextfield.text!, snap: self.snapchatTextfield.text!, twitter: self.twitterTextfield.text!, phoneNum: self.phoneNumberTextfield.text!, insta: self.instagramTextfield.text!, firstN: self.firstNameTextfield.text!, lastN: self.lastNameTextfield.text!, email: self.emailText.text!)
+                                    }
+                        }
             
             guard let imageSelected = self.newImage else {return}
-            
             guard let imageDate = imageSelected.jpegData(compressionQuality: 0.4) else{return}
-            
             let storageRef = Storage.storage().reference(forURL: "gs://rxswiftmovies.appspot.com/")
             let storageProfileRef = storageRef.child("profile").child(SignInUpViewController.passedUser.email)
             
@@ -97,28 +129,13 @@ class MyInfoViewController: UIViewController{
                             self.imageURLSetter(url: metaImageUrl)
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
                                     self.userCollectionRef.document(SignInUpViewController.passedUser.email).updateData([
-                                        "aboutMe":self.aboutMeTextfield.text!,
-                                        "snapchat":self.snapchatTextfield.text!,
-                                        "twitter":self.twitterTextfield.text!,
-                                        "phoneNumber":self.phoneNumberTextfield.text!,
-                                        "instagram":self.instagramTextfield.text!,
-                                                    "firstName":self.firstNameTextfield.text!,
-                                                    "lastName":self.lastNameTextfield.text!,
-                                                    "personalImage":SignInUpViewController.passedUser.personalImage
-
-                                ]){ e in
+                                                    "personalImage":SignInUpViewController.passedUser.personalImage]){ e in
                                                         if let error = e{
                                                             debugPrint("Error fetching docs: \(error.localizedDescription)")
                                                         }
                                                         else{
-                                                            SignInUpViewController.passedUser.aboutMe = self.aboutMeTextfield.text!
-                                                            SignInUpViewController.passedUser.snapchat = self.snapchatTextfield.text!
-                                                            SignInUpViewController.passedUser.twitter = self.twitterTextfield.text!
-                                                            SignInUpViewController.passedUser.phoneNumber = self.phoneNumberTextfield.text!
-                                                            SignInUpViewController.passedUser.instagram = self.instagramTextfield.text!
-                                                            SignInUpViewController.passedUser.firstName = self.firstNameTextfield.text!
-                                                            SignInUpViewController.passedUser.email = self.emailText.text!
-                                                            SignInUpViewController.passedUser.lastName = self.lastNameTextfield.text!
+
+                                                            SignInUpViewController.passedUser.personalImage = SignInUpViewController.passedUser.personalImage
                                                         }
                                                     }
                                 SignInUpViewController.passedUser.changed = false
@@ -128,6 +145,18 @@ class MyInfoViewController: UIViewController{
             })
 
         }
+    }
+    
+
+    func userUpdater(aboutme:String,snap:String,twitter:String,phoneNum:String,insta:String,firstN:String,lastN:String,email:String){
+        SignInUpViewController.passedUser.aboutMe = aboutme
+        SignInUpViewController.passedUser.snapchat = snap
+        SignInUpViewController.passedUser.twitter = twitter
+        SignInUpViewController.passedUser.phoneNumber = phoneNum
+        SignInUpViewController.passedUser.instagram = insta
+        SignInUpViewController.passedUser.firstName = firstN
+        SignInUpViewController.passedUser.email = email
+        SignInUpViewController.passedUser.lastName = lastN
     }
 }
 
@@ -154,17 +183,3 @@ extension MyInfoViewController:UIGestureRecognizerDelegate,UIImagePickerControll
             picker.dismiss(animated: true, completion: nil)
         }
 }
-
-
-//                    userCollectionRef.whereField("email", isEqualTo: SignInUpViewController.passedUser.email).getDocuments(completion: { (snapshot, e) in
-//                        if let error = e{
-//                            debugPrint("Error fetching docs: \(error.localizedDescription)")
-//                        }
-//                        else{
-//                            guard let snap = snapshot else {return}
-//                            for document in (snap.documents){
-//                                    let data = document.data()
-//
-//                                }
-//                                              }
-//                                          })
