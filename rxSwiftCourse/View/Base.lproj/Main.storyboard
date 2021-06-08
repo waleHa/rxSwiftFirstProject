@@ -12,7 +12,7 @@
         <!--Main View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="BYZ-38-t0r" customClass="MainViewController" customModule="rxSwiftCourse" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="BYZ-38-t0r" customClass="MainViewController" customModule="Next_Movie" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -21,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="56" width="414" height="593"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="131" id="3x9-iH-chv" customClass="MainCellTableViewCell" customModule="rxSwiftCourse" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="131" id="3x9-iH-chv" customClass="MainCellTableViewCell" customModule="Next_Movie" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="131"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3x9-iH-chv" id="znB-BG-PBK">
@@ -94,7 +94,10 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="ja1-3W-IvQ"/>
                                 </constraints>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="GNB-Kb-BmR"/>
+                                </connections>
                             </searchBar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ah2-jU-QLS" userLabel="Question View">
                                 <rect key="frame" x="12" y="710" width="390" height="39"/>
@@ -154,6 +157,9 @@
                                 <rect key="frame" x="12" y="659" width="390" height="47"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="movieCommentPressed:" destination="BYZ-38-t0r" eventType="editingDidEnd" id="zhI-AI-1rZ"/>
+                                </connections>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -199,7 +205,7 @@
         <!--Users Info View Controller-->
         <scene sceneID="vdW-kP-NEk">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="tOG-WA-BZU" customClass="UsersInfoViewController" customModule="rxSwiftCourse" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="tOG-WA-BZU" customClass="UsersInfoViewController" customModule="Next_Movie" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dlB-hl-eZg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -403,7 +409,7 @@
         <!--Newsfeed View Controller-->
         <scene sceneID="2bz-l6-eBh">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="g4P-8p-XEX" customClass="NewsfeedViewController" customModule="rxSwiftCourse" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="g4P-8p-XEX" customClass="NewsfeedViewController" customModule="Next_Movie" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Sqn-Fk-2cP">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -412,7 +418,7 @@
                                 <rect key="frame" x="0.0" y="56" width="414" height="703"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PostCell1" id="oZS-pB-8Lo" customClass="PostHeaderCell" customModule="rxSwiftCourse" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PostCell1" id="oZS-pB-8Lo" customClass="PostHeaderCell" customModule="Next_Movie" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oZS-pB-8Lo" id="n0N-k3-9Wd">
@@ -468,7 +474,7 @@
                                             <outlet property="usernameButton" destination="EcH-sg-wUN" id="R0G-bI-SJX"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PostCell2" rowHeight="530" id="TOJ-cy-308" customClass="PostCell" customModule="rxSwiftCourse" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PostCell2" rowHeight="530" id="TOJ-cy-308" customClass="PostCell" customModule="Next_Movie" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="73" width="414" height="530"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="TOJ-cy-308" id="chf-yz-HMp">
@@ -599,7 +605,7 @@
         <!--Favourite Movies-->
         <scene sceneID="y1H-Na-CXL">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="M2t-ip-suq" customClass="FavouriteViewController" customModule="rxSwiftCourse" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="M2t-ip-suq" customClass="FavouriteViewController" customModule="Next_Movie" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="peq-vg-nQ5">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -608,7 +614,7 @@
                                 <rect key="frame" x="0.0" y="10" width="414" height="659"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="favCell" rowHeight="160" id="aoh-61-gTK" customClass="FavCellTableViewCell" customModule="rxSwiftCourse" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="favCell" rowHeight="160" id="aoh-61-gTK" customClass="FavCellTableViewCell" customModule="Next_Movie" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="160"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="aoh-61-gTK" id="Ara-Xz-rTz">
@@ -686,7 +692,7 @@
                                             <outlet property="yearLabel" destination="aJD-sw-o0r" id="sXE-9r-6qg"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="favCell2" rowHeight="68" id="scV-LW-3ig" customClass="FavCell2TableViewCell" customModule="rxSwiftCourse" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="favCell2" rowHeight="68" id="scV-LW-3ig" customClass="FavCell2TableViewCell" customModule="Next_Movie" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="188" width="414" height="68"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="scV-LW-3ig" id="xw5-P6-ERu">
@@ -697,6 +703,9 @@
                                                     <rect key="frame" x="30" y="21" width="282" height="26"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="commentsTextfieldPressed:" destination="scV-LW-3ig" eventType="editingDidEnd" id="4Da-8P-zOv"/>
+                                                    </connections>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="NQ8-8B-EtQ">
                                                     <rect key="frame" x="322" y="21" width="70" height="26"/>
@@ -772,7 +781,7 @@
         <!--Welcome-->
         <scene sceneID="dpF-ZQ-k04">
             <objects>
-                <viewController storyboardIdentifier="WelcomeViewController" modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="OfG-z3-pcV" customClass="SignInUpViewController" customModule="rxSwiftCourse" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WelcomeViewController" modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="OfG-z3-pcV" customClass="SignInUpViewController" customModule="Next_Movie" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="E3d-m4-tTm">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -822,6 +831,9 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="374" height="62.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                         <textInputTraits key="textInputTraits" textContentType="given-name"/>
+                                                        <connections>
+                                                            <action selector="firstNamePressed:" destination="OfG-z3-pcV" eventType="editingDidEnd" id="0zA-bG-gpi"/>
+                                                        </connections>
                                                     </textField>
                                                 </subviews>
                                                 <constraints>
@@ -838,6 +850,9 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="374" height="62.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                         <textInputTraits key="textInputTraits" textContentType="family-name"/>
+                                                        <connections>
+                                                            <action selector="lastNamePressed:" destination="OfG-z3-pcV" eventType="editingDidEnd" id="0IX-fN-uEw"/>
+                                                        </connections>
                                                     </textField>
                                                 </subviews>
                                                 <constraints>
@@ -854,6 +869,9 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="374" height="62.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                         <textInputTraits key="textInputTraits" textContentType="tel"/>
+                                                        <connections>
+                                                            <action selector="PhoneNumberPressed:" destination="OfG-z3-pcV" eventType="editingDidEnd" id="NCm-BS-FBJ"/>
+                                                        </connections>
                                                     </textField>
                                                 </subviews>
                                                 <constraints>
@@ -870,6 +888,9 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="374" height="62.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                         <textInputTraits key="textInputTraits" textContentType="email"/>
+                                                        <connections>
+                                                            <action selector="emailPressed:" destination="OfG-z3-pcV" eventType="editingDidEnd" id="EaK-rb-6jP"/>
+                                                        </connections>
                                                     </textField>
                                                 </subviews>
                                                 <constraints>
@@ -886,6 +907,9 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="374" height="62.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                         <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
+                                                        <connections>
+                                                            <action selector="passwordPressed:" destination="OfG-z3-pcV" eventType="editingDidEnd" id="hGn-Po-MjH"/>
+                                                        </connections>
                                                     </textField>
                                                 </subviews>
                                                 <constraints>
@@ -1025,7 +1049,7 @@
         <!--My Info View Controller-->
         <scene sceneID="YWH-et-Gxo">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="ahD-cg-Zcw" customClass="MyInfoViewController" customModule="rxSwiftCourse" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="ahD-cg-Zcw" customClass="MyInfoViewController" customModule="Next_Movie" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="luc-c9-oDN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

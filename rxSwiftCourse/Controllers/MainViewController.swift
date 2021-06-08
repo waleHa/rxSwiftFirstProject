@@ -58,6 +58,7 @@ class MainViewController: UIViewController{
 
         tableView.dataSource = self
         tableView.delegate = self
+        movieCommentTextfield.delegate = self
         self.navigationItem.setHidesBackButton(true, animated: true)
         questionView.alpha = 0;
         movieCommentTextfield.alpha = 0
@@ -71,7 +72,7 @@ class MainViewController: UIViewController{
             .distinctUntilChanged()
                 .filter({!$0.isEmpty}) // $0.count != 0 //If empty stop later
         
-                .debounce(0.5, scheduler: MainScheduler.instance) // 0.5 seconds after the first value
+                .debounce(1.5, scheduler: MainScheduler.instance) // 0.5 seconds after the first value
                 .subscribe(onNext: { (query) in
                     let url = "https://www.omdbapi.com/?apikey="+Key.myKey+"&s=" + query
                     print(url)
@@ -139,6 +140,8 @@ class MainViewController: UIViewController{
         }
     
     }
+    
+
     //MARK:- fuctions
     func firestoreSetter(){
         
@@ -238,8 +241,24 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         
     }
 
-}
 
+}
+extension MainViewController: UISearchBarDelegate,UITextFieldDelegate {
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+                movieSearchBar.searchTextField.endEditing(true)
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0{
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
+    @IBAction func movieCommentPressed(_ sender: UITextField) {
+        movieCommentTextfield.endEditing(true)
+    }
+
+}
 
 extension UIImageView {
     func load(url: URL) {
@@ -254,3 +273,5 @@ extension UIImageView {
         }
     }
 }
+
+

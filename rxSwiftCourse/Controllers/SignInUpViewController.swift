@@ -49,6 +49,11 @@ class SignInUpViewController: UIViewController {
 //                    .tabBar(self, didSelect: false)
         mainView.alpha = 0
         errorLabel.alpha = 0
+        firstNameTextField.delegate = self
+        lastNameTextField.delegate = self
+        phoneNumberTextField.delegate = self
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
     }
     
     func Changer(to alphaValue:Int, caller:String, next:String){
@@ -74,7 +79,6 @@ class SignInUpViewController: UIViewController {
     }
     @IBAction func registerButtonPressed(_ sender: UIButton){
         registerUI()
-        
     }
     
     func validateFields() -> String?{
@@ -105,7 +109,6 @@ class SignInUpViewController: UIViewController {
             errorLabel.text = "Please fill all the fields."
         }
         else{
-            
             guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return}
             guard let password = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return}
             
@@ -174,8 +177,9 @@ class SignInUpViewController: UIViewController {
         }
         
     }
-        
-            func userDataGetter(_ email:String){
+
+    
+    func userDataGetter(_ email:String){
                 
                 self.userCollectionRef = Firestore.firestore().collection("Users").document(email)
                 self.userCollectionRef.getDocument(completion: { (snapshot, e) in
@@ -251,4 +255,32 @@ class SignInUpViewController: UIViewController {
      }
      */
     
+}
+
+extension SignInUpViewController:UITextFieldDelegate{
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        firstNameTextField.endEditing(true)
+        lastNameTextField.endEditing(true)
+        phoneNumberTextField.endEditing(true)
+        emailTextField.endEditing(true)
+        passwordTextField.endEditing(true)
+        return true
+    }
+    
+    @IBAction func firstNamePressed(_ sender: UITextField) {
+        firstNameTextField.endEditing(true)
+    }
+    @IBAction func lastNamePressed(_ sender: UITextField) {
+        lastNameTextField.endEditing(true)
+    }
+    @IBAction func PhoneNumberPressed(_ sender: UITextField) {
+        phoneNumberTextField.endEditing(true)
+    }
+    @IBAction func emailPressed(_ sender: UITextField) {
+        emailTextField.endEditing(true)
+    }
+    @IBAction func passwordPressed(_ sender: UITextField) {
+        passwordTextField.endEditing(true)
+    }
 }

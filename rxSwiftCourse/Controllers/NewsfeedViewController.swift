@@ -189,6 +189,7 @@ extension NewsfeedViewController: UITableViewDelegate, UITableViewDataSource {
             
             if indexPath.row != 0{
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell2") as! PostCell? else{return UITableViewCell()}
+
                 cell.post = posts[indexPath.section]
                 cell.configure(with: indexPath.section)
                 cell.delegate = self
@@ -198,7 +199,9 @@ extension NewsfeedViewController: UITableViewDelegate, UITableViewDataSource {
             }
             else{
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell1") as! PostHeaderCell? else{return UITableViewCell()}
-                
+//                 guard let cell = UITableViewCell(style: .default, reuseIdentifier: "PostCell1") as? PostHeaderCell else{return UITableViewCell()}
+//                let cell = UITableViewCell(style: .default, reuseIdentifier: "PostCell1") as! PostHeaderCell
+
                 if posts.count>0{
                     cell.post = posts[indexPath.section]
                     cell.configure(with: indexPath.section)

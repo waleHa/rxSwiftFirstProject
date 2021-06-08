@@ -204,18 +204,14 @@ extension Utilities{
             let minutes = Int(seconds / 60)
             
             if days > 1{
-                result = "\(days) days ago"}
-            else{
+                return "\(days) days ago"}
                 if hours > 0{
-                    result = "\(hours) hours ago"}
-                else{
-                    if minutes > 0{
-                        result = "\(minutes) minutes ago"
-                    }
-                    else{
-                        result = "\(seconds) seconds ago"}
-                    }
+                    return "\(hours) hours ago"}
+                if minutes > 0{
+                    return "\(minutes) minutes ago"
                 }
+                if seconds > 0{
+                    return "\(seconds) seconds ago"}
         }
         else{
             print("else")
